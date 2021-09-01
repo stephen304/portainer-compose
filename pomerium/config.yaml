@@ -1,0 +1,43 @@
+# See detailed configuration settings : https://www.pomerium.com/docs/reference/
+
+# this is the domain the identity provider will callback after a user authenticates
+authenticate_service_url: https://auth.mesh.party
+
+####################################################################################
+# Certificate settings:  https://www.pomerium.com/docs/reference/certificates.html #
+# The example below assumes a certificate and key file will be mounted to a volume #
+# available to the  Docker image.                                                  #
+####################################################################################
+
+
+##################################################################################
+# Identity provider settings : https://www.pomerium.com/docs/identity-providers/ #
+# The keys required in this section vary depending on your IdP. See the          #
+# appropriate docs for your IdP to configure Pomerium accordingly.               #
+##################################################################################
+idp_provider: google
+#idp_client_id:
+#idp_client_secret:
+
+# Generate 256 bit random keys  e.g. `head -c32 /dev/urandom | base64`
+#cookie_secret:
+
+# https://pomerium.com/reference/#routes
+routes:
+  - from: https://verify.mesh.party
+    to: http://verify
+    policy:
+      - allow:
+          or:
+            - email:
+                is: stephen304@gmail.com
+    pass_identity_headers: true
+
+  - from: https://portainer.mesh.party
+    to: http://portainer
+    policy:
+      - allow:
+          or:
+            - email:
+                is: stephen304@gmail.com
+    pass_identity_headers: true
